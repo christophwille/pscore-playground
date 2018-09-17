@@ -7,12 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.1.0" />
-    <PackageReference Include="Microsoft.WSMan.Management" Version="6.1.0" />
-    <PackageReference Include="System.Management.Automation" Version="6.1.0" />
-    <PackageReference Include="Microsoft.PowerShell.Commands.Management" Version="6.1.0" />
-    <PackageReference Include="Microsoft.WSMan.Runtime" Version="6.1.0" />
-    <PackageReference Include="psrp" Version="1.4.2" />
-    <PackageReference Include="libmi" Version="1.4.101000" />
   </ItemGroup>
 
 </Project>
