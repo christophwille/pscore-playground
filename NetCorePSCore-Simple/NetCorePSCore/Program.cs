@@ -25,7 +25,7 @@ namespace NetCorePSCore
 			string pass = Console.ReadLine();
 
 			SimpleExO(admin, pass);
-			// WSManConnectToExO(admin, pass);
+			WSManConnectToExO(admin, pass);
 
 
 			Console.Read();
