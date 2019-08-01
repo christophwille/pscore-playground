@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29123.89
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCorePSCore", "NetCorePSCore\NetCorePSCore.csproj", "{7A314A30-A9F6-4A71-A3E7-20A8B0086728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.RemotePS", "NetCore.RemotePS\NetCore.RemotePS.csproj", "{A2E7E268-4D75-40EA-9680-E26F81C3071F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.RemotePS", "NetCore.RemotePS\NetCore.RemotePS.csproj", "{A2E7E268-4D75-40EA-9680-E26F81C3071F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.SimpleWebApi", "NetCore.SimpleWebApi\NetCore.SimpleWebApi.csproj", "{9B1BD4FF-51EF-494B-BAC7-80680D71B63B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A2E7E268-4D75-40EA-9680-E26F81C3071F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2E7E268-4D75-40EA-9680-E26F81C3071F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2E7E268-4D75-40EA-9680-E26F81C3071F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B1BD4FF-51EF-494B-BAC7-80680D71B63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B1BD4FF-51EF-494B-BAC7-80680D71B63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B1BD4FF-51EF-494B-BAC7-80680D71B63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B1BD4FF-51EF-494B-BAC7-80680D71B63B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
