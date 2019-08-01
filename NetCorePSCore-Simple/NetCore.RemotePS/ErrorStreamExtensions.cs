@@ -4,7 +4,7 @@ using System.Linq;
 using System.Management.Automation;
 using System.Text;
 
-namespace NetCorePSCore
+namespace NetCore.RemotePS
 {
     public static class ErrorStreamExtensions
     {
