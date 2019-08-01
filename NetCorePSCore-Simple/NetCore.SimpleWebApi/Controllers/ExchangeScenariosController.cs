@@ -9,7 +9,7 @@ namespace NetCore.SimpleWebApi.Controllers
 	[ApiController]
 	public class ExchangeScenariosController : ControllerBase
 	{
-		[HttpGet]
+		[HttpPost]
 		public string Get(string username, string password)
 		{
 			try
