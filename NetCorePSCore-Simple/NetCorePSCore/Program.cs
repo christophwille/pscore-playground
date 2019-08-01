@@ -24,7 +24,10 @@ namespace NetCorePSCore
 			string pass = Console.ReadLine();
 
 			var (errS1, resultS1) = RemoteExchangePowerShellScenarios.SimpleExO(admin, pass);
+			Console.WriteLine($"Call#1, Errors: {errS1}, Result: {resultS1}");
+
 			var (errS2, resultS2) = RemoteExchangePowerShellScenarios.WSManConnectToExO(admin, pass);
+			Console.WriteLine($"Call#1, Errors: {errS2}, Result: {resultS2}");
 
 			Console.Read();
 		}
