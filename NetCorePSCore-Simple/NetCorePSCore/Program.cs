@@ -9,7 +9,7 @@ namespace NetCorePSCore
 {
 	class Program
 	{
-		// "When will the NuGet package be on nuget.org?" https://github.com/PowerShell/PowerShell/issues/6475
+		// https://www.nuget.org/packages/Microsoft.PowerShell.SDK/
 
 		// Official documentation https://github.com/PowerShell/PowerShell/tree/master/docs/host-powershell
 		// SO https://stackoverflow.com/questions/39141914/running-powershell-from-net-core
