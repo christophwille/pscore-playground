@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <!-- https://github.com/GrabYourPitchforks/docs/blob/bf_obsoletion_docs/docs/standard/serialization/resolving-binaryformatter-obsoletion-errors.md -->
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <UserSecretsId>7e672fbf-5578-4704-b67d-23d71b092eb8</UserSecretsId>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <!--<DockerfileRunArguments></DockerfileRunArguments>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ExoV203CertAuthN\ErrorStreamExtensions.cs" Link="ErrorStreamExtensions.cs" />
+    <Compile Include="..\ExoV203CertAuthN\ExoCertAuthN.cs" Link="ExoCertAuthN.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+</Project>
