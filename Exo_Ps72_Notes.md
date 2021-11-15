@@ -71,11 +71,14 @@ https://github.com/dgoldman-msft/PSServicePrincipal/ no longer useful IMO (Windo
 
 ## Docker
 
-https://github.com/dotnet/dotnet-docker/blob/main/src/runtime/6.0/focal/amd64/Dockerfile
-
-https://github.com/dotnet/dotnet-docker/blob/main/src/aspnet/6.0/focal/amd64/Dockerfile
-
-https://hub.docker.com/_/microsoft-powershell - 7.2.0-ubuntu-focal-20211102
-
-
 https://docs.microsoft.com/en-us/dotnet/architecture/microservices/net-core-net-framework-containers/net-container-os-targets
+
+* https://github.com/dotnet/dotnet-docker/blob/main/src/runtime/6.0/focal/amd64/Dockerfile
+* https://github.com/dotnet/dotnet-docker/blob/main/src/aspnet/6.0/focal/amd64/Dockerfile
+
+List of all tags for PowerShell containers
+https://hub.docker.com/_/microsoft-powershell - 7.2.0-ubuntu-focal-20211102
+https://mcr.microsoft.com/v2/powershell/tags/list
+
+Supported parent images for Windows App Service containers
+https://docs.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-windows#supported-parent-images

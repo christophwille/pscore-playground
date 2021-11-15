@@ -72,8 +72,16 @@ public class ExchangeOnlineService : IExchangeOnlineService
         ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
 
         List<PSObject> results = ps.Invoke().ToList();
+        var err = FlattenErrors(ps);
+        var result = ResultsToSimpleString(results);
 
-        return (FlattenErrors(ps), ResultsToSimpleString(results));
+        // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
+        ps.Commands.Clear();
+        ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
+        var disconnectResult = ps.Invoke().ToList();
+        var disconnectErr = FlattenErrors(ps);
+
+        return (err, result);
     }
 
     private static string FlattenErrors(PowerShell ps)

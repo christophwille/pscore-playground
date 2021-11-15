@@ -18,7 +18,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/getexomailbox", (IExchangeOnlineService exchangeOnlineService) =>
+app.MapGet("/getexomailbox", (IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
     var (err, result) = exchangeOnlineService.GetExoMailbox();
     return new ExoResult(err, result);
