@@ -82,3 +82,32 @@ https://mcr.microsoft.com/v2/powershell/tags/list
 
 Supported parent images for Windows App Service containers
 https://docs.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-windows#supported-parent-images
+
+### Interactive in Container
+
+`docker pull mcr.microsoft.com/powershell:7.2.0-ubuntu-20.04`
+
+`docker run -it mcr.microsoft.com/powershell:7.2.0-ubuntu-20.04 /bin/bash`
+
+In container:
+
+```
+apt-get update
+apt-get -y install sudo
+
+sudo pwsh
+
+Install-Module -Name PSWSMan
+Install-WSMan
+
+exit
+
+pwsh
+Install-Module -Name ExchangeOnlineManagement
+
+Connect-ExchangeOnline -Device
+
+Get-EXOMailbox
+```
+
+See ubuntu-container-test-log.txt

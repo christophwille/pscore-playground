@@ -1,0 +1,109 @@
+root@a61ed24d736e:/# apt-get update
+Get:1 http://archive.ubuntu.com/ubuntu focal InRelease [265 kB]
+Get:2 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]
+Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]
+Get:4 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [809 kB]
+Get:5 http://archive.ubuntu.com/ubuntu focal-backports InRelease [101 kB]
+Get:6 http://archive.ubuntu.com/ubuntu focal/main amd64 Packages [1,275 kB]
+Get:7 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [1,232 kB]
+Get:8 http://archive.ubuntu.com/ubuntu focal/multiverse amd64 Packages [177 kB]
+Get:9 http://archive.ubuntu.com/ubuntu focal/restricted amd64 Packages [33.4 kB]
+Get:10 http://archive.ubuntu.com/ubuntu focal/universe amd64 Packages [11.3 MB]
+Get:11 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [682 kB]
+Get:12 http://security.ubuntu.com/ubuntu focal-security/multiverse amd64 Packages [30.1 kB]
+Get:13 http://archive.ubuntu.com/ubuntu focal-updates/multiverse amd64 Packages [33.3 kB]
+Get:14 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1,098 kB]
+Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [1,689 kB]
+Get:16 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [738 kB]
+Get:17 http://archive.ubuntu.com/ubuntu focal-backports/main amd64 Packages [2,668 B]
+Get:18 http://archive.ubuntu.com/ubuntu focal-backports/universe amd64 Packages [7,185 B]
+Fetched 19.7 MB in 18s (1,097 kB/s)
+Reading package lists... Done
+root@a61ed24d736e:/# apt-get -y install sudo
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following NEW packages will be installed:
+  sudo
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 514 kB of archives.
+After this operation, 2,257 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 sudo amd64 1.8.31-1ubuntu1.2 [514 kB]
+Fetched 514 kB in 1s (787 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package sudo.
+(Reading database ... 7209 files and directories currently installed.)
+Preparing to unpack .../sudo_1.8.31-1ubuntu1.2_amd64.deb ...
+Unpacking sudo (1.8.31-1ubuntu1.2) ...
+Setting up sudo (1.8.31-1ubuntu1.2) ...
+root@a61ed24d736e:/# sudo pwsh
+PowerShell 7.2.0
+Copyright (c) Microsoft Corporation.
+
+https://aka.ms/powershell
+Type 'help' to get help.
+
+PS /> Install-Module -Name PSWSMan
+
+Untrusted repository
+You are installing the modules from an untrusted repository. If you trust this repository, change its
+InstallationPolicy value by running the Set-PSRepository cmdlet. Are you sure you want to install the modules from
+'PSGallery'?
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): A
+PS /> Install-WSMan
+WARNING: WSMan libs have been installed, please restart your PowerShell session to enable it in PowerShell
+PS /> exit
+root@a61ed24d736e:/# pwsh
+PowerShell 7.2.0
+Copyright (c) Microsoft Corporation.
+
+https://aka.ms/powershell
+Type 'help' to get help.
+
+PS /> Install-Module -Name ExchangeOnlineManagement
+
+Untrusted repository
+You are installing the modules from an untrusted repository. If you trust this repository, change its
+InstallationPolicy value by running the Set-PSRepository cmdlet. Are you sure you want to install the modules from
+'PSGallery'?
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): A
+PS /> Connect-ExchangeOnline -Device
+
+----------------------------------------------------------------------------
+The module allows access to all existing remote PowerShell (V1) cmdlets in addition to the 9 new, faster, and more reliable cmdlets.
+
+|--------------------------------------------------------------------------|
+|    Old Cmdlets                    |    New/Reliable/Faster Cmdlets       |
+|--------------------------------------------------------------------------|
+|    Get-CASMailbox                 |    Get-EXOCASMailbox                 |
+|    Get-Mailbox                    |    Get-EXOMailbox                    |
+|    Get-MailboxFolderPermission    |    Get-EXOMailboxFolderPermission    |
+|    Get-MailboxFolderStatistics    |    Get-EXOMailboxFolderStatistics    |
+|    Get-MailboxPermission          |    Get-EXOMailboxPermission          |
+|    Get-MailboxStatistics          |    Get-EXOMailboxStatistics          |
+|    Get-MobileDeviceStatistics     |    Get-EXOMobileDeviceStatistics     |
+|    Get-Recipient                  |    Get-EXORecipient                  |
+|    Get-RecipientPermission        |    Get-EXORecipientPermission        |
+|--------------------------------------------------------------------------|
+
+To get additional information, run: Get-Help Connect-ExchangeOnline or check https://aka.ms/exops-docs
+
+Send your product improvement suggestions and feedback to exocmdletpreview@service.microsoft.com. For issues related to the module, contact Microsoft support. Don't use the feedback alias for problems or support issues.
+----------------------------------------------------------------------------
+
+To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code C9ZQC2DAR to authenticate.
+PS /> Get-EXOMailbox
+
+ExternalDirectoryObjectId : d2b12250-2641-40f0-b8ee-2f2cc8ca3fc2
+UserPrincipalName         : AdeleV@cwie5dev.onmicrosoft.com
+Alias                     : AdeleV
+...content removed for clarity....
+
+
+PS /> Disconnect-ExchangeOnline
+
+Running this cmdlet clears all active sessions created using Connect-ExchangeOnline or Connect-IPPSSession.
+Press(Y/y/A/a) if you want to continue.
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+Removed the PSSession ExchangeOnlineInternalSession_1 connected to outlook.office365.com
+Disconnected successfully !
