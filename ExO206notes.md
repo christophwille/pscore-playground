@@ -1,8 +1,7 @@
 # ExO 2.0.6-preview 3 Tests
 
-Works on Windows (see [interactive notebook](ExO206tests.ipynb)), works in WSL.
-
-Docker has an interesting "quirk" - it creates a remoting module on Connect-ExchangeOnline (doesn't happen in Windows or WSL for that matter)
+Works on Windows (see [interactive notebook](ExO206tests.ipynb)), works in WSL, works in Docker.
+No more remoting module is being created on Connect-ExchangeOnline.
 
 ### Interactive in Container
 
@@ -24,7 +23,7 @@ Install-WSMan
 exit
 
 pwsh
-Install-Module -Name ExchangeOnlineManagement
+Install-Module -Name ExchangeOnlineManagement -RequiredVersion 2.0.6-Preview3 -AllowPrerelease
 
 Connect-ExchangeOnline -Device
 
@@ -32,7 +31,3 @@ Get-EXOMailbox
 
 Disconnect-ExchangeOnline -Confirm:$false
 ```
-
-On Connect-ExchangeOnline, remoting module is created:
-
-![On Connect-ExchangeOnline](docker_ubuntu_creatingimplicitremotingmodule.png)
