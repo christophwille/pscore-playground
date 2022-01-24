@@ -1,6 +1,7 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Docker for Windows: Settings -> Docker Engine -> buildkit = false on "failed to solve with frontend dockerfile.v0: failed to read dockerfile:"
 
-FROM exopsaspnet:1 AS base
+FROM exopsaspnet:2 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443

@@ -3,6 +3,7 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json;
 
 namespace ExOonNet6;
 
@@ -11,26 +12,47 @@ public record ExOResult(string Errors, string Result, long TimeToConnect, long T
 public interface IExchangeOnlineService
 {
     ExOResult GetExoMailbox();
+    ExOResult GetExoMailboxWithPfx(ExOPfx pfxInfo);
+
+    string GetPfxInfo();
 }
 
 public class ExchangeOnlineService : IExchangeOnlineService
 {
+    private readonly ExOSettingsOptions _options;
     private readonly ILogger<ExchangeOnlineService> _logger;
 
     public string AppId { get; }
     public string Organization { get; }
-    public X509Certificate2 Certificate { get; }
+    public X509Certificate2 Certificate { get; private set; }
 
     public ExchangeOnlineService(IOptions<ExOSettingsOptions> options, ILogger<ExchangeOnlineService> logger)
     {
-        AppId = options.Value.AppId;
-        Organization = options.Value.Organization;
+        _options = options.Value;
+        AppId = _options.AppId;
+        Organization = _options.Organization;
 
-        string pfxFile = options.Value.PfxPath;
-        string pfxPwd = options.Value.PfxPassword;
-        Certificate = new X509Certificate2(pfxFile, pfxPwd);
+        string pfxFile = _options.PfxPath;
+        string pfxPwd = _options.PfxPassword;
+        try
+        {
+            Certificate = new X509Certificate2(pfxFile, pfxPwd);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(exception: e, "Failed to load PFX file");
+        }
 
         _logger = logger;
+    }
+
+    public string GetPfxInfo()
+    {
+        byte[] pfxBytes = System.IO.File.ReadAllBytes(_options.PfxPath);
+        string base64Pfx = System.Convert.ToBase64String(pfxBytes);
+
+        var options = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        return JsonSerializer.Serialize(new ExOPfx(base64Pfx, _options.PfxPassword), options);
     }
 
     public ExOResult GetExoMailbox()
@@ -94,6 +116,14 @@ public class ExchangeOnlineService : IExchangeOnlineService
         var disconnectErr = FlattenErrors(ps);
 
         return new ExOResult(err, result, elapsedConnect, elapsedCmds, elapsedTotal);
+    }
+
+    public ExOResult GetExoMailboxWithPfx(ExOPfx pfxInfo)
+    {
+        byte[] data = Convert.FromBase64String(pfxInfo.PfxBase64);
+        Certificate = new X509Certificate2(data, pfxInfo.PfxPassword);
+
+        return GetExoMailbox();
     }
 
     private static string FlattenErrors(PowerShell ps)

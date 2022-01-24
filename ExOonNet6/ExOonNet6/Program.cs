@@ -24,4 +24,12 @@ app.MapGet("/getexomailbox", (IExchangeOnlineService exchangeOnlineService, ILog
 })
 .WithName("GetExoMailbox");
 
+app.MapPost("/getexomailboxwithpfx", (ExOPfx pfxInfo, IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
+{
+    return exchangeOnlineService.GetExoMailboxWithPfx(pfxInfo);
+})
+.WithName("GetExoMailboxWithPfx");
+
 app.Run();
+
+public record ExOPfx(string PfxBase64, string PfxPassword);
