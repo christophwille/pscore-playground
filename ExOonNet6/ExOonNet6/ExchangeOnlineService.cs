@@ -6,9 +6,11 @@ using System.Text;
 
 namespace ExOonNet6;
 
+public record ExOResult(string Errors, string Result, long TimeToConnect, long TimeAfterCmds, long TimeTotal);
+
 public interface IExchangeOnlineService
 {
-    (string errors, string result) GetExoMailbox();
+    ExOResult GetExoMailbox();
 }
 
 public class ExchangeOnlineService : IExchangeOnlineService
@@ -31,8 +33,11 @@ public class ExchangeOnlineService : IExchangeOnlineService
         _logger = logger;
     }
 
-    public (string errors, string result) GetExoMailbox()
+    public ExOResult GetExoMailbox()
     {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        long elapsedConnect, elapsedCmds, elapsedTotal = 0;
+
         // Stage #1
         InitialSessionState iss = InitialSessionState.CreateDefault();
         iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
@@ -50,18 +55,22 @@ public class ExchangeOnlineService : IExchangeOnlineService
 
             pipeLine.Commands.Add(connectCmd);
 
-            /*
-            Inner Exception 1:
-            PSRemotingDataStructureException: An error has occurred which PowerShell cannot handle. A remote session might have ended.
+            try
+            {
+                pipeLine.Invoke();
+            }
+            catch (Exception e)
+            {
+                return new ExOResult(e.ToString(), "", 0, 0, 0);
+            }
 
-            Inner Exception 2:
-            NotSupportedException: BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.
-            */
-            // See .csproj for EnableUnsafeBinaryFormatterSerialization, otherwise .Invoke throws above exception.
-            pipeLine.Invoke();
+            elapsedConnect = sw.ElapsedMilliseconds;
             if (pipeLine.Error != null && pipeLine.Error.Count > 0)
             {
-                // check error
+                throw new NotImplementedException(); // Error handing code below is not tested
+                var errors = pipeLine.Error.ReadToEnd();
+                var errStringified = "!Errors! " + String.Join(" :: ", errors.Select(error => error.ToString()).ToList());
+                return new ExOResult(errStringified, "", elapsedConnect, 0, 0);
             }
         }
 
@@ -72,6 +81,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
 
         List<PSObject> results = ps.Invoke().ToList();
+        elapsedCmds = sw.ElapsedMilliseconds;
         var err = FlattenErrors(ps);
         var result = ResultsToSimpleString(results);
 
@@ -79,9 +89,11 @@ public class ExchangeOnlineService : IExchangeOnlineService
         ps.Commands.Clear();
         ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
         var disconnectResult = ps.Invoke().ToList();
+        sw.Stop();
+        elapsedTotal = sw.ElapsedMilliseconds;
         var disconnectErr = FlattenErrors(ps);
 
-        return (err, result);
+        return new ExOResult(err, result, elapsedConnect, elapsedCmds, elapsedTotal);
     }
 
     private static string FlattenErrors(PowerShell ps)
