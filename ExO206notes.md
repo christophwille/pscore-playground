@@ -17,6 +17,9 @@ apt-get -y install sudo
 
 sudo pwsh
 
+# Suppress installation confirmations for PS modules
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+
 Install-Module -Name PSWSMan
 Install-WSMan
 
