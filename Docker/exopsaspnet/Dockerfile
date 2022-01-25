@@ -1,7 +1,7 @@
 # Based on https://github.com/dotnet/dotnet-docker/blob/main/src/runtime/6.0/focal/amd64/Dockerfile
 # Based on https://github.com/dotnet/dotnet-docker/blob/main/src/aspnet/6.0/focal/amd64/Dockerfile
 
-ARG REPO=
+ARG REPO=exops
 
 # Installer image
 FROM amd64/buildpack-deps:focal-curl as installer
@@ -21,10 +21,14 @@ RUN curl -fSL --output aspnetcore.tar.gz https://dotnetcli.azureedge.net/dotnet/
     && tar -ozxf aspnetcore.tar.gz ./shared/Microsoft.AspNetCore.App \
     && rm aspnetcore.tar.gz
 
-# FROM $REPO:exops:1
-FROM exops:1
+FROM $REPO:1
 
+# https://github.com/dotnet/dotnet-docker/blob/main/src/runtime-deps/6.0/cbl-mariner1.0/amd64/Dockerfile for additional ENV vars
 ENV \
+    # Configure web servers to bind to port 80 when present
+    ASPNETCORE_URLS=http://+:80 \
+    # Enable detection of running in a container
+    DOTNET_RUNNING_IN_CONTAINER=true \
     DOTNET_VERSION=6.0.1 \
     # ASP.NET Core version
     ASPNET_VERSION=6.0.1 \
