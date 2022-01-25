@@ -59,7 +59,12 @@ public class ExchangeOnlineService : IExchangeOnlineService
 
         // Stage #1
         InitialSessionState iss = InitialSessionState.CreateDefault();
-        iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
+
+        // NOTE: No longer necessary anyways in 2.0.6, but would fail in Docker Ubuntu
+        // System.PlatformNotSupportedException Message = Operation is not supported on this platform.
+        // StackTrace: at System.Management.Automation.Internal.SecuritySupport.SetExecutionPolicy
+        // iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
+
         iss.ImportPSModule(new string[] { "ExchangeOnlineManagement" });
 
         using var exchangeRunspace = RunspaceFactory.CreateRunspace(iss);
@@ -87,9 +92,11 @@ public class ExchangeOnlineService : IExchangeOnlineService
             if (pipeLine.Error != null && pipeLine.Error.Count > 0)
             {
                 throw new NotImplementedException(); // Error handing code below is not tested
+#pragma warning disable CS0162 // Unreachable code detected
                 var errors = pipeLine.Error.ReadToEnd();
                 var errStringified = "!Errors! " + String.Join(" :: ", errors.Select(error => error.ToString()).ToList());
                 return new ExOResult(errStringified, "", elapsedConnect, 0, 0);
+#pragma warning restore CS0162 // Unreachable code detected
             }
         }
 
