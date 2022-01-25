@@ -24,6 +24,13 @@ app.MapGet("/getexomailbox", (IExchangeOnlineService exchangeOnlineService, ILog
 })
 .WithName("GetExoMailbox");
 
+// For eg Docker scenarios where you don't want to populate the ExoSettings.PfxPath property
+app.MapGet("/getpfxinfo", (IExchangeOnlineService exchangeOnlineService) =>
+{
+    return exchangeOnlineService.GetPfxInfo();
+})
+.WithName("GetPfxInfo");
+
 app.MapPost("/getexomailboxwithpfx", (ExOPfx pfxInfo, IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
     return exchangeOnlineService.GetExoMailboxWithPfx(pfxInfo);
@@ -31,5 +38,3 @@ app.MapPost("/getexomailboxwithpfx", (ExOPfx pfxInfo, IExchangeOnlineService exc
 .WithName("GetExoMailboxWithPfx");
 
 app.Run();
-
-public record ExOPfx(string PfxBase64, string PfxPassword);

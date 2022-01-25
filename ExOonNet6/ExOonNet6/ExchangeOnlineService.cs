@@ -3,18 +3,17 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.Json;
 
 namespace ExOonNet6;
 
+public record ExOPfx(string PfxBase64, string PfxPassword);
 public record ExOResult(string Errors, string Result, long TimeToConnect, long TimeAfterCmds, long TimeTotal);
 
 public interface IExchangeOnlineService
 {
     ExOResult GetExoMailbox();
     ExOResult GetExoMailboxWithPfx(ExOPfx pfxInfo);
-
-    string GetPfxInfo();
+    ExOPfx GetPfxInfo();
 }
 
 public class ExchangeOnlineService : IExchangeOnlineService
@@ -46,13 +45,11 @@ public class ExchangeOnlineService : IExchangeOnlineService
         _logger = logger;
     }
 
-    public string GetPfxInfo()
+    public ExOPfx GetPfxInfo()
     {
         byte[] pfxBytes = System.IO.File.ReadAllBytes(_options.PfxPath);
         string base64Pfx = System.Convert.ToBase64String(pfxBytes);
-
-        var options = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        return JsonSerializer.Serialize(new ExOPfx(base64Pfx, _options.PfxPassword), options);
+        return new ExOPfx(base64Pfx, _options.PfxPassword);
     }
 
     public ExOResult GetExoMailbox()
