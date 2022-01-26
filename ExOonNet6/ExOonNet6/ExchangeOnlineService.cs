@@ -11,8 +11,8 @@ public record ExOResult(string Errors, string Result, long TimeToConnect, long T
 
 public interface IExchangeOnlineService
 {
-    ExOResult GetExoMailbox();
-    ExOResult GetExoMailboxWithPfx(ExOPfx pfxInfo);
+    Task<ExOResult> GetExoMailbox(bool invokeAsync = true);
+    Task<ExOResult> GetExoMailboxWithPfx(ExOPfx pfxInfo, bool invokeAsync = true);
     ExOPfx GetPfxInfo();
 }
 
@@ -52,19 +52,13 @@ public class ExchangeOnlineService : IExchangeOnlineService
         return new ExOPfx(base64Pfx, _options.PfxPassword);
     }
 
-    public ExOResult GetExoMailbox()
+    public async Task<ExOResult> GetExoMailbox(bool invokeAsync = true)
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
-        long elapsedConnect, elapsedCmds, elapsedTotal = 0;
+        long elapsedConnect = 0, elapsedCmds = 0, elapsedTotal = 0;
 
         // Stage #1
         InitialSessionState iss = InitialSessionState.CreateDefault();
-
-        // NOTE: No longer necessary anyways in 2.0.6, but would fail in Docker Ubuntu
-        // System.PlatformNotSupportedException Message = Operation is not supported on this platform.
-        // StackTrace: at System.Management.Automation.Internal.SecuritySupport.SetExecutionPolicy
-        // iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
-
         iss.ImportPSModule(new string[] { "ExchangeOnlineManagement" });
 
         using var exchangeRunspace = RunspaceFactory.CreateRunspace(iss);
@@ -105,40 +99,30 @@ public class ExchangeOnlineService : IExchangeOnlineService
         ps.Runspace = exchangeRunspace;
 
         ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
+        List<PSObject> results = await ps.InvokeAsyncConditionally(invokeAsync);
 
-        List<PSObject> results = ps.Invoke().ToList();
         elapsedCmds = sw.ElapsedMilliseconds;
-        var err = FlattenErrors(ps);
+        var err = ps.StreamsErrorToString();
         var result = ResultsToSimpleString(results);
 
         // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
         ps.Commands.Clear();
         ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
-        var disconnectResult = ps.Invoke().ToList();
+        var disconnectResult = await ps.InvokeAsyncConditionally(invokeAsync);
+        var disconnectErr = ps.StreamsErrorToString();
+
         sw.Stop();
         elapsedTotal = sw.ElapsedMilliseconds;
-        var disconnectErr = FlattenErrors(ps);
 
         return new ExOResult(err, result, elapsedConnect, elapsedCmds, elapsedTotal);
     }
 
-    public ExOResult GetExoMailboxWithPfx(ExOPfx pfxInfo)
+    public Task<ExOResult> GetExoMailboxWithPfx(ExOPfx pfxInfo, bool invokeAsync = true)
     {
         byte[] data = Convert.FromBase64String(pfxInfo.PfxBase64);
         Certificate = new X509Certificate2(data, pfxInfo.PfxPassword);
 
         return GetExoMailbox();
-    }
-
-    private static string FlattenErrors(PowerShell ps)
-    {
-        string errors = "";
-        if (ps.Streams.Error.Count > 0)
-        {
-            errors = "!Errors! " + String.Join(" :: ", ps.Streams.Error.Select(error => error.ToString()).ToList());
-        }
-
-        return errors;
     }
 
     private static string ResultsToSimpleString(List<PSObject> results)

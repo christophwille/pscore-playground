@@ -18,9 +18,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/getexomailbox", (IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
+app.MapGet("/getexomailbox", async (IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
-    return exchangeOnlineService.GetExoMailbox();
+    return await exchangeOnlineService.GetExoMailbox();
 })
 .WithName("GetExoMailbox");
 
@@ -31,9 +31,9 @@ app.MapGet("/getpfxinfo", (IExchangeOnlineService exchangeOnlineService) =>
 })
 .WithName("GetPfxInfo");
 
-app.MapPost("/getexomailboxwithpfx", (ExOPfx pfxInfo, IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
+app.MapPost("/getexomailboxwithpfx", async (ExOPfx pfxInfo, IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
-    return exchangeOnlineService.GetExoMailboxWithPfx(pfxInfo);
+    return await exchangeOnlineService.GetExoMailboxWithPfx(pfxInfo);
 })
 .WithName("GetExoMailboxWithPfx");
 
