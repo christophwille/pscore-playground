@@ -6,8 +6,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<ExOConnectSettings>(builder.Configuration.GetSection("ExOConnectSettings"));
-builder.Services.AddTransient<IExchangeOnlinePowerShellFactory, ExchangeOnlinePowerShellFactory>();
-builder.Services.AddTransient<IExchangeOnlineService, ExchangeOnlineService>();
+builder.Services.AddScoped<IExchangeOnlinePowerShellFactory, ExchangeOnlinePowerShellFactory>();
+builder.Services.AddScoped<IExchangeOnlineService, ExchangeOnlineService>();
 
 var app = builder.Build();
 
@@ -24,11 +24,18 @@ app.MapGet("/getexomailbox", async (IExchangeOnlineService exchangeOnlineService
     try
     {
         var exoResult = await exchangeOnlineService.GetExoMailbox();
-        return Results.Ok(exoResult);
+
+        if (String.IsNullOrWhiteSpace(exoResult.Errors))
+            return Results.Ok(exoResult);
+
+        logger.LogError(exoResult.Errors);
+
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
     }
     catch (Exception ex)
     {
-        return Results.Problem(ex.ToString());
+        logger.LogError(ex, "ExO call failed");
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
     }
 })
 .WithName("GetExoMailbox");

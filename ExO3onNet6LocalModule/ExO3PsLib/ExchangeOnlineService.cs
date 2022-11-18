@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Data.SqlTypes;
 using System.Management.Automation;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -46,8 +45,9 @@ public class ExchangeOnlineService : IExchangeOnlineService
         using var ps = _exoPsFactory.Connect(_options.AppId, _options.Organization, Certificate, _options.ModulePath);
         elapsedConnect = sw.ElapsedMilliseconds;
 
+        // If an exception happens here, then the %temp%/tmpEXO_ folder sticks around
         ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
-        PSDataCollection<PSObject> results = await ps.InvokeAsync().ConfigureAwait(false); // DO NOT materialize to a List<T>
+        ICollection<PSObject> results = ps.Invoke(); // DO NOT materialize to a List<T>
 
         elapsedCmds = sw.ElapsedMilliseconds;
         var err = ps.StreamsErrorToString();
@@ -56,7 +56,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
         ps.Commands.Clear();
         ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
-        var disconnectResult = await ps.InvokeAsync().ConfigureAwait(false);
+        var disconnectResult = ps.Invoke();
         var disconnectErr = ps.StreamsErrorToString();
 
         sw.Stop();
@@ -73,7 +73,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         return GetExoMailbox();
     }
 
-    private static string ResultsToSimpleString(PSDataCollection<PSObject> results)
+    private static string ResultsToSimpleString(ICollection<PSObject> results)
     {
         StringBuilder stb = new StringBuilder();
         foreach (var result in results)

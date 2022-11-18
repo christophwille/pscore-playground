@@ -18,6 +18,7 @@ namespace ExO3PsLib
         {
             InitialSessionState iss = InitialSessionState.CreateDefault();
             iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted; // otherwise: ".. cannot be loaded because running scripts is disabled on this system"
+            iss.ThrowOnRunspaceOpenError = true;
             iss.ImportPSModule(new string[] { modulePath }); // would be "ExchangeOnlineManagement" for installed PS module
 
             return iss;
@@ -37,11 +38,24 @@ namespace ExO3PsLib
                 connectCmd.Parameters.Add("Organization", organization);
                 connectCmd.Parameters.Add("Certificate", certificate);
 
+                connectCmd.Parameters.Add("ShowBanner", false);
+                connectCmd.Parameters.Add("SkipLoadingFormatData", true);
+                connectCmd.Parameters.Add("ShowProgress", false);
+                connectCmd.Parameters.Add("UseMultithreading", true);       // default anyways
+
+                connectCmd.Parameters.Add("EnableErrorReporting", false);
+                // connectCmd.Parameters.Add("LogDirectoryPath", "D:\\demos\\EXOTelemetry");
+                // connectCmd.Parameters.Add("LogLevel", "All");
+
                 pipeLine.Commands.Add(connectCmd);
 
                 try
                 {
-                    pipeLine.Invoke();
+                    var resultCollection = pipeLine.Invoke();
+                    if (resultCollection.Count > 0)
+                    {
+                        _logger.LogInformation("Got result collection when I should not");
+                    }
                 }
                 catch (Exception ex)
                 {

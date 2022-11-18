@@ -1,1 +1,1 @@
-bombardier -t 10s -d 100s -c 5 -n 20 -m GET https://localhost:7262/getexomailbox
+bombardier -t 10s -d 500s -c 5 -n 10 -m GET https://localhost:7262/getexomailbox
