@@ -33,9 +33,11 @@ appSettings.Development.json sample
 # Connect-ExchangeOnline Observations
 
 * NOTE that `New-EXOModule` in `ExchangeOnlineManagement.psm1` loads dynamic psd1 and psm1 from the Internet
-* DO put a breakpoint an EXO call and dive into the newly downloaded %temp%/tmpEXO_* folder created by `New-EXOModule`
+* DO put a breakpoint on an EXO call, then dive into the newly downloaded `%temp%/tmpEXO_*` folder created by `New-EXOModule`
 * DO open `ExchangeOnlineManagement.psm1`, search for `Get-HelpFiles` and comment that line. That loads less stuff.
 * DO USE `SkipLoadingFormatData` on Connect-ExchangeOnline. That loads less stuff.
+
+And... carefully read the next section!
 
 # Load Testing Observations
 
