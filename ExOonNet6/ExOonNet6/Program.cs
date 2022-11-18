@@ -20,7 +20,22 @@ app.UseHttpsRedirection();
 
 app.MapGet("/getexomailbox", async (IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
-    return await exchangeOnlineService.GetExoMailbox();
+    try
+    {
+        var exoResult = await exchangeOnlineService.GetExoMailbox();
+
+        if (String.IsNullOrWhiteSpace(exoResult.Errors))
+            return Results.Ok(exoResult);
+
+        logger.LogError(exoResult.Errors);
+
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "ExO call failed");
+        return Results.StatusCode(StatusCodes.Status500InternalServerError);
+    }
 })
 .WithName("GetExoMailbox");
 
