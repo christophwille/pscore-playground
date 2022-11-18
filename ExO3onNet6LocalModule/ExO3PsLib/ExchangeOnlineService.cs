@@ -47,7 +47,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
 
         // If an exception happens here, then the %temp%/tmpEXO_ folder sticks around
         ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
-        ICollection<PSObject> results = ps.Invoke(); // DO NOT materialize to a List<T>
+        ICollection<PSObject> results = await ps.InvokeAsync().ConfigureAwait(false); // DO NOT materialize to a List<T>
 
         elapsedCmds = sw.ElapsedMilliseconds;
         var err = ps.StreamsErrorToString();
@@ -56,7 +56,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
         ps.Commands.Clear();
         ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
-        var disconnectResult = ps.Invoke();
+        var disconnectResult = await ps.InvokeAsync().ConfigureAwait(false);
         var disconnectErr = ps.StreamsErrorToString();
 
         sw.Stop();
