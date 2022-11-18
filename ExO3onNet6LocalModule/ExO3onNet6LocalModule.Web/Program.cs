@@ -21,7 +21,15 @@ app.UseHttpsRedirection();
 
 app.MapGet("/getexomailbox", async (IExchangeOnlineService exchangeOnlineService, ILogger<Program> logger) =>
 {
-    return await exchangeOnlineService.GetExoMailbox();
+    try
+    {
+        var exoResult = await exchangeOnlineService.GetExoMailbox();
+        return Results.Ok(exoResult);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.ToString());
+    }
 })
 .WithName("GetExoMailbox");
 
