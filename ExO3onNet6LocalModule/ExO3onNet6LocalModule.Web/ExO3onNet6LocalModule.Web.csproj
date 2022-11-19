@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>59f0d882-2dbb-4ff9-ade9-37c0ce56331d</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.7" />
+		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ExO3PsLib\ExO3PsLib.csproj" />
+		<ProjectReference Include="..\ExO3PsLib\ExO3PsLib.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Properties\" />
+		<Folder Include="Properties\" />
 	</ItemGroup>
 
 </Project>
