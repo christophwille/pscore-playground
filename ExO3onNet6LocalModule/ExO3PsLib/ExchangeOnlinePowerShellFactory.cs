@@ -2,6 +2,7 @@
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace ExO3PsLib
 {
@@ -76,6 +77,29 @@ namespace ExO3PsLib
 
             var ps = PowerShell.Create();
             ps.Runspace = exchangeRunspace;
+
+            return ps;
+        }
+
+        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        {
+            string rootFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            var iss = CreateInitialSessionState(modulePath);
+
+            iss.Variables.Add(new SessionStateVariableEntry("exoAppId", appId, "no description"));
+            iss.Variables.Add(new SessionStateVariableEntry("exoOrganization", organization, "no description"));
+            iss.Variables.Add(new SessionStateVariableEntry("exoCertificate", certificate, "no description"));
+            bool result = iss.StartupScripts.Add(System.IO.Path.Combine(rootFolder, "ConnectScript.ps1"));
+
+            RunspacePool pool = RunspaceFactory.CreateRunspacePool(iss);
+
+            pool.SetMinRunspaces(1);
+            pool.SetMaxRunspaces(3);
+            pool.Open(); // FAILS: System.Management.Automation.PSInvalidOperationException HResult = 0x80131509 Message = Running startup script threw an error: Cannot add type.Compilation errors occurred..
+
+            var ps = PowerShell.Create();
+            ps.RunspacePool = pool;
 
             return ps;
         }
