@@ -96,7 +96,7 @@ namespace ExO3PsLib
 
             pool.SetMinRunspaces(1);
             pool.SetMaxRunspaces(3);
-            pool.Open(); // FAILS: System.Management.Automation.PSInvalidOperationException HResult = 0x80131509 Message = Running startup script threw an error: Cannot add type.Compilation errors occurred..
+            pool.Open();
 
             var ps = PowerShell.Create();
             ps.RunspacePool = pool;

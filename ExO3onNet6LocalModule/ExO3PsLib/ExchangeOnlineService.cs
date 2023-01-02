@@ -42,7 +42,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         var sw = System.Diagnostics.Stopwatch.StartNew();
         long elapsedConnect = 0, elapsedCmds = 0, elapsedTotal = 0;
 
-        using var ps = _exoPsFactory.Connect(_options.AppId, _options.Organization, Certificate, _options.ModulePath);
+        using var ps = _exoPsFactory.ConnectViaPool(_options.AppId, _options.Organization, Certificate, _options.ModulePath);
         elapsedConnect = sw.ElapsedMilliseconds;
 
         // If an exception happens here, then the %temp%/tmpEXO_ folder sticks around
