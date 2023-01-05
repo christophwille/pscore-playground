@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+_exo_module_unpacked/
+
 # User-specific files
 *.suo
 *.user

@@ -73,7 +73,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         return GetExoMailbox();
     }
 
-    private static string ResultsToSimpleString(ICollection<PSObject> results)
+    public static string ResultsToSimpleString(ICollection<PSObject> results)
     {
         StringBuilder stb = new StringBuilder();
         foreach (var result in results)

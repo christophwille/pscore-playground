@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExO3onNet6LocalModule.Web", "ExO3onNet6LocalModule.Web\ExO3onNet6LocalModule.Web.csproj", "{02D06BCF-F58C-43BF-BAFE-53F0501BBD15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExO3PsLib", "ExO3PsLib\ExO3PsLib.csproj", "{10A9730F-5AD8-42B9-97C7-5332B159A7AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExO3PsLib", "ExO3PsLib\ExO3PsLib.csproj", "{10A9730F-5AD8-42B9-97C7-5332B159A7AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExO3onNet7Containerized", "ExO3onNet7Containerized\ExO3onNet7Containerized.csproj", "{366758AB-3819-4914-9B1E-6B710C9988AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{10A9730F-5AD8-42B9-97C7-5332B159A7AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10A9730F-5AD8-42B9-97C7-5332B159A7AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10A9730F-5AD8-42B9-97C7-5332B159A7AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{366758AB-3819-4914-9B1E-6B710C9988AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{366758AB-3819-4914-9B1E-6B710C9988AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{366758AB-3819-4914-9B1E-6B710C9988AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{366758AB-3819-4914-9B1E-6B710C9988AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
