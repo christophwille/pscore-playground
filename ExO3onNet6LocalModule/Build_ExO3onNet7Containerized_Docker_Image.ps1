@@ -1,0 +1,1 @@
+docker build . -f ./ExO3onNet7Containerized/Dockerfile -t exodemo:42
