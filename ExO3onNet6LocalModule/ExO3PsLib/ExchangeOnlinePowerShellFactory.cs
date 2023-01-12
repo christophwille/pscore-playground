@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -18,7 +19,14 @@ namespace ExO3PsLib
         private InitialSessionState CreateInitialSessionState(string modulePath)
         {
             InitialSessionState iss = InitialSessionState.CreateDefault();
-            iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted; // otherwise: ".. cannot be loaded because running scripts is disabled on this system"
+
+            // See https://github.com/PowerShell/PowerShell/issues/18934 (will crash Linux with an exception)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // If not done on Windows: ".. cannot be loaded because running scripts is disabled on this system"
+                iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
+            }
+
             iss.ThrowOnRunspaceOpenError = true;
             iss.ImportPSModule(new string[] { modulePath }); // would be "ExchangeOnlineManagement" for installed PS module
 
