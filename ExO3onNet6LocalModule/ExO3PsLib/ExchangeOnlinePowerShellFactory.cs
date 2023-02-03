@@ -89,7 +89,7 @@ namespace ExO3PsLib
             return ps;
         }
 
-        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        public RunspacePool OpenPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
         {
             string rootFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
@@ -105,6 +105,13 @@ namespace ExO3PsLib
             pool.SetMinRunspaces(1);
             pool.SetMaxRunspaces(3);
             pool.Open();
+
+            return pool;
+        }
+
+        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        {
+            var pool = OpenPool(appId, organization, certificate, modulePath);
 
             var ps = PowerShell.Create();
             ps.RunspacePool = pool;
