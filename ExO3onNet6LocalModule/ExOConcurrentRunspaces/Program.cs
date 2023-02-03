@@ -36,11 +36,25 @@ for (int i = 0; i < exoOrgs.Length; i++)
     perOrgRunspacePools.Add(org, pool);
 }
 
+// Using Get-Mailbox
 foreach (string org in perOrgRunspacePools.Keys)
 {
     using (var ps = CreatePowerShellForRunspacePool(perOrgRunspacePools[org]))
     {
-        var (error,result) = GetExoMailbox(ps);
+        var (error, result) = GetMailbox(ps);
+        if (!result.Contains(org))
+        {
+            System.Diagnostics.Debugger.Launch();
+        }
+    }
+}
+
+// Using Get-EXOMailbox
+foreach (string org in perOrgRunspacePools.Keys)
+{
+    using (var ps = CreatePowerShellForRunspacePool(perOrgRunspacePools[org]))
+    {
+        var (error, result) = GetExoMailbox(ps);
         if (!result.Contains(org))
         {
             System.Diagnostics.Debugger.Launch();
@@ -65,18 +79,26 @@ PowerShell CreatePowerShellForRunspacePool(RunspacePool pool)
     ICollection<PSObject> results = ps.Invoke();
 
     var err = ps.StreamsErrorToString();
-    var result = ResultsToSimpleString(results);
-
-    return (err, result);
+    return (err, ParsePSmtp(results));
 }
 
-string ResultsToSimpleString(ICollection<PSObject> results)
+(string error, string result) GetMailbox(PowerShell ps)
+{
+    ps.AddCommand("Get-Mailbox");
+    ps.AddParameter("RecipientTypeDetails", "SharedMailbox");
+    ps.AddParameter("ResultSize", "Unlimited");
+    ICollection<PSObject> results = ps.Invoke();
+
+    var err = ps.StreamsErrorToString();
+    return (err, ParsePSmtp(results));
+}
+
+string ParsePSmtp(ICollection<PSObject> results)
 {
     StringBuilder stb = new StringBuilder();
     foreach (var result in results)
     {
-        stb.AppendLine(result.ToString());
+        stb.AppendLine(result.Members["primarysmtpaddress"].Value.ToString());
     }
-
     return stb.ToString();
 }
