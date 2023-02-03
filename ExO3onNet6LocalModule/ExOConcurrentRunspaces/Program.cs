@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 const string modulePath = "D:\\GitWorkspace\\_exo3module_unpacked\\3.1.0\\ExchangeOnlineManagement.psd1";
-const string pfxbasepath = "D:\\GitWorkspace\\";
+const string pfxbasepath = "D:\\GitWorkspace\\_demo_tenants\\";
 
 var builder = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -44,10 +44,12 @@ foreach (string org in perOrgRunspacePools.Keys)
         var (error, result) = GetMailbox(ps);
         if (!result.Contains(org))
         {
-            System.Diagnostics.Debugger.Launch();
+            throw new Exception("Got data from other tenant");
         }
     }
 }
+
+Console.WriteLine("Get-Mailbox calls completed");
 
 // Using Get-EXOMailbox
 foreach (string org in perOrgRunspacePools.Keys)
@@ -57,10 +59,12 @@ foreach (string org in perOrgRunspacePools.Keys)
         var (error, result) = GetExoMailbox(ps);
         if (!result.Contains(org))
         {
-            System.Diagnostics.Debugger.Launch();
+            throw new Exception("Got data from other tenant");
         }
     }
 }
+
+Console.WriteLine("Get-ExOMailbox calls completed");
 
 PowerShell CreatePowerShellForRunspacePool(RunspacePool pool)
 {
