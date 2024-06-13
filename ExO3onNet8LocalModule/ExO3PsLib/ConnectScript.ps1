@@ -5,8 +5,8 @@ Connect-ExchangeOnline -AppId $exoAppId `
 -Certificate $exoCertificate `
 -ShowProgress:$false `
 -ShowBanner:$false `
--SkipLoadingFormatData `
--SkipLoadingCmdletHelp
+-SkipLoadingFormatData:$true `
+-SkipLoadingCmdletHelp:$true
 
 # EXPLICIT positional everything below for TESTING
 
