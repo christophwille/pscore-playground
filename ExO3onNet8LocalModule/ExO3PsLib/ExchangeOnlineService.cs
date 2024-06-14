@@ -41,26 +41,36 @@ public class ExchangeOnlineService : IExchangeOnlineService
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
         long elapsedConnect = 0, elapsedCmds = 0, elapsedTotal = 0;
+        string err = string.Empty, result = string.Empty;
 
-        using var ps = _exoPsFactory.ConnectViaPool(_options.AppId, _options.Organization, Certificate, _options.ModulePath);
-        elapsedConnect = sw.ElapsedMilliseconds;
+        try
+        {
+            using var ps = _exoPsFactory.ConnectViaPool(_options.AppId, _options.Organization, Certificate, _options.ModulePath);
+            elapsedConnect = sw.ElapsedMilliseconds;
 
-        // If an exception happens here, then the %temp%/tmpEXO_ folder sticks around
-        ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
-        ICollection<PSObject> results = await ps.InvokeAsync().ConfigureAwait(false); // DO NOT materialize to a List<T>
+            // If an exception happens here, then the %temp%/tmpEXO_ folder sticks around
+            ps.Commands.AddCommand("Get-EXOMailBox").AddParameter("ResultSize", "unlimited");
+            ICollection<PSObject> results = await ps.InvokeAsync().ConfigureAwait(false); // DO NOT materialize to a List<T>
 
-        elapsedCmds = sw.ElapsedMilliseconds;
-        var err = ps.StreamsErrorToString();
-        var result = ResultsToSimpleString(results);
+            elapsedCmds = sw.ElapsedMilliseconds;
+            err = ps.StreamsErrorToString();
+            result = ResultsToSimpleString(results);
 
-        // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
-        ps.Commands.Clear();
-        ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
-        var disconnectResult = await ps.InvokeAsync().ConfigureAwait(false);
-        var disconnectErr = ps.StreamsErrorToString();
-
-        sw.Stop();
-        elapsedTotal = sw.ElapsedMilliseconds;
+            // https://docs.microsoft.com/en-us/powershell/module/exchange/disconnect-exchangeonline?view=exchange-ps
+            ps.Commands.Clear();
+            ps.Commands.AddCommand("Disconnect-ExchangeOnline").AddParameter("Confirm", false);
+            var disconnectResult = await ps.InvokeAsync().ConfigureAwait(false);
+            err = ps.StreamsErrorToString();
+        }
+        catch (Exception ex)
+        {
+            err = ex.ToString();
+        }
+        finally
+        {
+            sw.Stop();
+            elapsedTotal = sw.ElapsedMilliseconds;
+        }
 
         return new ExOResult(err, result, elapsedConnect, elapsedCmds, elapsedTotal);
     }
