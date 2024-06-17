@@ -1,18 +1,8 @@
 ﻿# Docs: https://learn.microsoft.com/en-us/powershell/module/exchange/connect-exchangeonline?view=exchange-ps
 
-Connect-ExchangeOnline -AppId $exoAppId `
--Organization $exoOrganization `
--Certificate $exoCertificate `
--ShowProgress:$false `
--ShowBanner:$false `
--SkipLoadingFormatData:$true `
--SkipLoadingCmdletHelp:$true
 
-# EXPLICIT positional everything below for TESTING
-
-<#
 [string[]] $emptyStringArray = @("*");
-[Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel] $logLevel = [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel]::Default;
+[Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel] $logLevel = [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel]::All;
 
 Connect-ExchangeOnline -ConnectionUri '' `
 -AzureADAuthorizationEndpointUri '' `
@@ -24,26 +14,39 @@ Connect-ExchangeOnline -ConnectionUri '' `
 -FormatTypeName $emptyStringArray `
 -AccessToken '' `
 -AppId $exoAppId `
--BypassMailboxAnchoring:$false `
 -Certificate $exoCertificate `
 -CertificateFilePath '' `
 -CertificatePassword $null `
 -CertificateThumbprint '' `
 -Credential $null `
--Device:$false `
--EnableErrorReporting:$false `
--InlineCredential:$false `
--LogDirectoryPath '' `
+-EnableErrorReporting `
+-LogDirectoryPath 'd:' `
 -LogLevel $logLevel `
--ManagedIdentity:$false `
 -ManagedIdentityAccountId  '' `
 -Organization $exoOrganization `
 -PageSize 1000 `
 -ShowBanner:$false `
 -ShowProgress:$false `
--SkipLoadingFormatData:$true
-# -TrackPerformance <Boolean>]
-# -UseMultithreading <Boolean>]
-# -UserPrincipalName <String>]
+-SigningCertificate $null `
+-SkipLoadingCmdletHelp `
+-SkipLoadingFormatData `
+-TrackPerformance:$true `
+-UseMultithreading:$true `
+-UserPrincipalName ''
+
+<#
+Connect-ExchangeOnline -AppId $exoAppId `
+-Organization $exoOrganization `
+-Certificate $exoCertificate `
+-ShowBanner:$false `
+-SkipLoadingFormatData:$true `
+-SkipLoadingCmdletHelp:$true `
+#>
+
+# EXPLICIT positional everything below for TESTING
+
+<#
+
+
 # -UseRPSSession]
 #>
