@@ -64,6 +64,7 @@ public class ExchangeOnlineService : IExchangeOnlineService
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Failure");
             err = ex.ToString();
         }
         finally

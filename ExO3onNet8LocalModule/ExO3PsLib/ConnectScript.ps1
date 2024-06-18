@@ -1,5 +1,6 @@
 ﻿# Docs: https://learn.microsoft.com/en-us/powershell/module/exchange/connect-exchangeonline?view=exchange-ps
 
+$VerbosePreference="Continue"
 
 [string[]] $emptyStringArray = @("*");
 [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel] $logLevel = [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel]::All;
