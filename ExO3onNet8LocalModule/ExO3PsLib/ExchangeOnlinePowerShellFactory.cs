@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ExO3PsLib.PowerShellEx;
+using Microsoft.Extensions.Logging;
 using System.Management.Automation;
+using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -100,10 +102,11 @@ namespace ExO3PsLib
             iss.Variables.Add(new SessionStateVariableEntry("exoCertificate", certificate, "no description"));
             bool result = iss.StartupScripts.Add(System.IO.Path.Combine(rootFolder, "ConnectScript.ps1"));
 
-            RunspacePool pool = RunspaceFactory.CreateRunspacePool(iss);
+            PSHost host = new HeadlessPSHost();
+            RunspacePool pool = RunspaceFactory.CreateRunspacePool(1, 3, iss, host);
 
-            pool.SetMinRunspaces(1);
-            pool.SetMaxRunspaces(3);
+            //pool.SetMinRunspaces(1);
+            //pool.SetMaxRunspaces(3);
             pool.Open();
 
             return pool;
