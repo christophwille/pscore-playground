@@ -29,8 +29,8 @@ Connect-ExchangeOnline -ConnectionUri '' `
 -ShowBanner:$false `
 -ShowProgress:$false `
 -SigningCertificate $null `
--SkipLoadingCmdletHelp `
--SkipLoadingFormatData `
+-SkipLoadingCmdletHelp:$true `
+-SkipLoadingFormatData:$true `
 -TrackPerformance:$true `
 -UseMultithreading:$true `
 -UserPrincipalName ''
