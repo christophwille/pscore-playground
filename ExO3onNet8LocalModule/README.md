@@ -47,15 +47,15 @@ For that to work, you have to reference these respective NuGet packages:
 
 
 ```xml
-	<ItemGroup>
-		<PackageReference Include="Microsoft.IdentityModel.Logging" Version="7.3.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="7.3.1" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="7.3.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="7.3.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
-		<PackageReference Include="Microsoft.OData.Client" Version="7.21.3" />
-	</ItemGroup>
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
+    <PackageReference Include="Microsoft.OData.Client" Version="7.21.3" />
+  </ItemGroup>
 ```
 
 You can check out **fromhosting_started_connect.txt** to see that the assemblies were actually loaded from the project and not the modules folder.
