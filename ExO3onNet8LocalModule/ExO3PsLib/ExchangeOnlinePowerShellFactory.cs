@@ -29,7 +29,7 @@ namespace ExO3PsLib
                 iss.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
             }
 
-            iss.ThrowOnRunspaceOpenError = false;
+            iss.ThrowOnRunspaceOpenError = true;
             iss.ImportPSModule(new string[] { modulePath }); // would be "ExchangeOnlineManagement" for installed PS module
 
             return iss;
