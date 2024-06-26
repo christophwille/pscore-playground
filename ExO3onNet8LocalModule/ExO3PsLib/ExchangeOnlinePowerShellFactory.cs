@@ -91,6 +91,16 @@ namespace ExO3PsLib
             return ps;
         }
 
+        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        {
+            var pool = OpenPool(appId, organization, certificate, modulePath);
+
+            var ps = PowerShell.Create();
+            ps.RunspacePool = pool;
+
+            return ps;
+        }
+
         public RunspacePool OpenPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
         {
             string rootFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -112,14 +122,23 @@ namespace ExO3PsLib
             return pool;
         }
 
-        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        // Used instead of the "simple" pool.Open() call
+        // With iss.ThrowOnRunspaceOpenError = true this will mean every subsequent call will telling you
+        // that the pool isn't open, so this approach is not helpful at all
+        private void OpenRunspacePoolIgnoreCompilationError(RunspacePool pool)
         {
-            var pool = OpenPool(appId, organization, certificate, modulePath);
-
-            var ps = PowerShell.Create();
-            ps.RunspacePool = pool;
-
-            return ps;
+            try
+            {
+                pool.Open();
+            }
+            catch (PSInvalidOperationException psEx) when (psEx.HResult == -2146233079 && psEx.Message.StartsWith("Running startup script threw an error: Cannot add type. Compilation errors occurred."))
+            {
+                // Silently ignore this error
+            }
         }
+
+        // iss.ThrowOnRunspaceOpenError = false; ==> leads to:
+        // System.Management.Automation.CmdletInvocationException: You must call Connect-ExchangeOnline before calling any other cmdlet.
+        // When Connect-Script.ps1 has failed for any reason (authN mostly)
     }
 }
