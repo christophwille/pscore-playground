@@ -5,7 +5,6 @@ using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 
 namespace ExO3PsLib
 {
@@ -18,7 +17,7 @@ namespace ExO3PsLib
             _logger = logger;
         }
 
-        private InitialSessionState CreateInitialSessionState(string modulePath)
+        private InitialSessionState CreateInitialSessionState(IPowerShellModuleSettings moduleSettings)
         {
             InitialSessionState iss = InitialSessionState.CreateDefault();
 
@@ -32,17 +31,17 @@ namespace ExO3PsLib
             iss.ThrowOnRunspaceOpenError = true;
             iss.ImportPSModule(new string[]
             {
-                "D:\\GitWorkspace\\_exo3module_unpacked\\packagemanagement.1.4.8.1\\PackageManagement.psd1",
-                "D:\\GitWorkspace\\_exo3module_unpacked\\powershellget.2.2.5\\PowerShellGet.psd1",
-                modulePath, // would be "ExchangeOnlineManagement" for installed PS module
+                moduleSettings.ModuleBasePath + moduleSettings.ModRelPathPackageManagement,
+                moduleSettings.ModuleBasePath + moduleSettings.ModRelPathPowerShellGet,
+                moduleSettings.ModuleBasePath + moduleSettings.ModRelPathExchangeOnlineManagement,
             });
 
             return iss;
         }
 
-        public PowerShell Connect(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        public PowerShell Connect(string appId, string organization, X509Certificate2 certificate, IPowerShellModuleSettings moduleSettings)
         {
-            var iss = CreateInitialSessionState(modulePath);
+            var iss = CreateInitialSessionState(moduleSettings);
 
             var exchangeRunspace = RunspaceFactory.CreateRunspace(iss);
             exchangeRunspace.Open();
@@ -96,9 +95,9 @@ namespace ExO3PsLib
             return ps;
         }
 
-        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        public PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, IPowerShellModuleSettings moduleSettings)
         {
-            var pool = OpenPool(appId, organization, certificate, modulePath);
+            var pool = OpenPool(appId, organization, certificate, moduleSettings);
 
             var ps = PowerShell.Create();
             ps.RunspacePool = pool;
@@ -106,11 +105,11 @@ namespace ExO3PsLib
             return ps;
         }
 
-        public RunspacePool OpenPool(string appId, string organization, X509Certificate2 certificate, string modulePath)
+        public RunspacePool OpenPool(string appId, string organization, X509Certificate2 certificate, IPowerShellModuleSettings moduleSettings)
         {
             string rootFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            var iss = CreateInitialSessionState(modulePath);
+            var iss = CreateInitialSessionState(moduleSettings);
 
             iss.Variables.Add(new SessionStateVariableEntry("exoAppId", appId, "no description"));
             iss.Variables.Add(new SessionStateVariableEntry("exoOrganization", organization, "no description"));
@@ -126,24 +125,5 @@ namespace ExO3PsLib
 
             return pool;
         }
-
-        // Used instead of the "simple" pool.Open() call
-        // With iss.ThrowOnRunspaceOpenError = true this will mean every subsequent call will telling you
-        // that the pool isn't open, so this approach is not helpful at all
-        private void OpenRunspacePoolIgnoreCompilationError(RunspacePool pool)
-        {
-            try
-            {
-                pool.Open();
-            }
-            catch (PSInvalidOperationException psEx) when (psEx.HResult == -2146233079 && psEx.Message.StartsWith("Running startup script threw an error: Cannot add type. Compilation errors occurred."))
-            {
-                // Silently ignore this error
-            }
-        }
-
-        // iss.ThrowOnRunspaceOpenError = false; ==> leads to:
-        // System.Management.Automation.CmdletInvocationException: You must call Connect-ExchangeOnline before calling any other cmdlet.
-        // When Connect-Script.ps1 has failed for any reason (authN mostly)
     }
 }

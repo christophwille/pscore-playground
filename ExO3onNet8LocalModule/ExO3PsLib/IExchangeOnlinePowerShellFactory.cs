@@ -5,7 +5,7 @@ namespace ExO3PsLib
 {
     public interface IExchangeOnlinePowerShellFactory
     {
-        PowerShell Connect(string appId, string organization, X509Certificate2 certificate, string modulePath);
-        PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, string modulePath);
+        PowerShell Connect(string appId, string organization, X509Certificate2 certificate, IPowerShellModuleSettings moduleSettings);
+        PowerShell ConnectViaPool(string appId, string organization, X509Certificate2 certificate, IPowerShellModuleSettings moduleSettings);
     }
 }
