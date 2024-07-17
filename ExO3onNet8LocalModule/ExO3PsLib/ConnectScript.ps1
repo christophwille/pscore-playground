@@ -2,6 +2,9 @@
 
 $VerbosePreference="Continue"
 
+# https://github.com/MicrosoftDocs/PowerShell-Docs/blob/main/reference/7.2/Microsoft.PowerShell.Utility/Set-TraceSource.md
+# Set-TraceSource -Name '*' -FilePath 'd:\createdbutremainsempty-toinvestigate.txt' -ListenerOption "ProcessId,TimeStamp"
+
 [string[]] $emptyStringArray = @("*");
 [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel] $logLevel = [Microsoft.Online.CSE.RestApiPowerShellModule.Instrumentation.LogLevel]::All;
 
@@ -51,3 +54,5 @@ Connect-ExchangeOnline -AppId $exoAppId `
 
 # -UseRPSSession]
 #>
+
+# Set-TraceSource -name '*' -RemoveFileListener
