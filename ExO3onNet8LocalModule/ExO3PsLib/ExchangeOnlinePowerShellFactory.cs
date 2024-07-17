@@ -30,7 +30,12 @@ namespace ExO3PsLib
             }
 
             iss.ThrowOnRunspaceOpenError = true;
-            iss.ImportPSModule(new string[] { modulePath }); // would be "ExchangeOnlineManagement" for installed PS module
+            iss.ImportPSModule(new string[]
+            {
+                "D:\\GitWorkspace\\_exo3module_unpacked\\packagemanagement.1.4.8.1\\PackageManagement.psd1",
+                "D:\\GitWorkspace\\_exo3module_unpacked\\powershellget.2.2.5\\PowerShellGet.psd1",
+                modulePath, // would be "ExchangeOnlineManagement" for installed PS module
+            });
 
             return iss;
         }
