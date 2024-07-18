@@ -1,13 +1,20 @@
-# Sample loading extracted ExchangeOnline module
+# Loading ExchangeOnlineManagement Module
 
-https://www.powershellgallery.com/packages/ExchangeOnlineManagement/3.0.0
+Starting with ExchangeOnlineManagement 3.4.1-preview1, RequiredModules was added to ExchangeOnlineManagement.psd1. Thus in addition to only
+
+https://www.powershellgallery.com/packages/ExchangeOnlineManagement/3.5.1
+
+you also need to download and unpack (as per the following explanation):
+
+* https://www.powershellgallery.com/packages/PackageManagement/1.4.8.1 and
+* https://www.powershellgallery.com/packages/PowerShellGet/2.2.5
 
 Manual Download / Download the raw nupkg file
 
 * Save with extension .zip
 * Make sure to go to Properties / check the Unblock and click Apply (otherwise won't execute)
 * Extract to folder (you could delete _rels, package, xml + nuspec in root) - see later section "Minimum set of files to retain"
-* Set appsettings.json / ExOConnectSettings / ModulePath, eg `"c:\\yourextracfolder\\ExchangeOnlineManagement.psd1"`
+* Set appsettings.json / ExOConnectSettings / ModuleBasePath et al to the extracted module locations
 
 appSettings.Development.json sample
 
@@ -25,7 +32,10 @@ appSettings.Development.json sample
     "PfxPassword": "",
     "AppId": "guidforpfxhere",
     "Organization": "youronmsdomainhere.onmicrosoft.com",
-    "ModulePath": "D:\\GitWorkspace\\_exo3module_unpacked\\ExchangeOnlineManagement.psd1"
+    "ModuleBasePath": "D:\\UnpackedModules\\",
+    "ModRelPathExchangeOnlineManagement": "3.5.1\\ExchangeOnlineManagement.psd1",
+    "ModRelPathPackageManagement": "packagemanagement.1.4.8.1\\PackageManagement.psd1",
+    "ModRelPathPowerShellGet": "powershellget.2.2.5\\PowerShellGet.psd1"
   }
 }
 ```
