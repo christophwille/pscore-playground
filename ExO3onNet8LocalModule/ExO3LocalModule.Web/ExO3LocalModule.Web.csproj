@@ -3,21 +3,11 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>59f0d882-2dbb-4ff9-ade9-37c0ce56331d</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.IdentityModel.Logging" Version="7.3.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="7.3.1" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
-		<PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="7.3.1" />
-		<PackageReference Include="Microsoft.OData.Client" Version="7.21.3" />
 		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
