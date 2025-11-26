@@ -24,7 +24,7 @@ Connect-ExchangeOnline -ConnectionUri '' `
 -CertificateThumbprint '' `
 -Credential $null `
 -EnableErrorReporting `
--LogDirectoryPath 'd:' `
+-LogDirectoryPath 'z:' `
 -LogLevel $logLevel `
 -ManagedIdentityAccountId  '' `
 -Organization $exoOrganization `
