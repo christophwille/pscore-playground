@@ -39,6 +39,11 @@ Connect-ExchangeOnline -ConnectionUri '' `
 -UserPrincipalName ''
 
 <#
+  v3.9.1-Preview1 :
+    1. Introduced -EXOModuleBasePath  switch in Connect-ExchangeOnline, which enables to store the temporary EXO module files in a custom path.
+#>
+
+<#
 Connect-ExchangeOnline -AppId $exoAppId `
 -Organization $exoOrganization `
 -Certificate $exoCertificate `
@@ -51,8 +56,9 @@ Connect-ExchangeOnline -AppId $exoAppId `
 
 <#
 
-
-# -UseRPSSession]
+<# 
+  v3.9.2-Preview1 :
+    2. Deprecated UseRpsSession parameter from Connect-ExchangeOnline and Connect-IPPSSession.
 #>
 
 # Set-TraceSource -name '*' -RemoveFileListener
