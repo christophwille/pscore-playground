@@ -24,7 +24,8 @@ Connect-ExchangeOnline -ConnectionUri '' `
 -CertificateThumbprint '' `
 -Credential $null `
 -EnableErrorReporting `
--LogDirectoryPath 'z:' `
+-LogDirectoryPath 'Z:\ExoTemp' `
+-EXOModuleBasePath 'Z:\ExoTemp' `
 -LogLevel $logLevel `
 -ManagedIdentityAccountId  '' `
 -Organization $exoOrganization `
